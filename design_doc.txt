@@ -24,6 +24,14 @@ This module tracks the live geometry of the active falling piece (coordinates an
 
 we have taken a sub module under Module-6: shape_look_up_table
 This takes Active piece, Rotation state, Active X and Y as inputs and gives coordinates of all 4 minos in the given rotation state.
+Assignment of 3 bit ID's for tetriminos:
+3'b000: 'O'
+3'b001: 'I'
+3'b010: 'T'
+3'b011: 'L'
+3'b100: 'J'
+3'b101: 'S'
+3'b110: 'Z'
 
 Module 7: VGA Controller
 This module handles the display output. It runs continuously on the 25.175 MHz clock to maintain internal horizontal and vertical pixel counters, which are used to generate the necessary HSYNC and VSYNC signals for the monitor. It translates the current pixel counters into Tetris grid coordinates (row and column). It then reads the Playfield Memory and checks the active piece coordinates from the Game State module. If a locked block or the active piece exists at the current coordinate, it outputs the white to the screen, otherwise, it outputs black.
