@@ -22,6 +22,9 @@ This module stores the locked blocks on the board. It consists of a 10x20 grid o
 Module 6: Game State and Control Logic
 This module tracks the live geometry of the active falling piece (coordinates and rotation state). It takes inputs from the Input Module (user commands), the Playfield Memory (for obstacle detection), and the 60 Hz enable pulse (for gravity). It is responsible for calculating tentative moves, checking for collisions, updating the piece's coordinates, and locking the piece into memory when it hits the floor. It outputs the active piece coordinates to the VGA controller and sends a spawn pulse to the Piece Buffer when a new piece is needed.
 
+we have taken a sub module under Module-6: shape_look_up_table
+This takes Active piece, Rotation state, Active X and Y as inputs and gives coordinates of all 4 minos in the given rotation state.
+
 Module 7: VGA Controller
 This module handles the display output. It runs continuously on the 25.175 MHz clock to maintain internal horizontal and vertical pixel counters, which are used to generate the necessary HSYNC and VSYNC signals for the monitor. It translates the current pixel counters into Tetris grid coordinates (row and column). It then reads the Playfield Memory and checks the active piece coordinates from the Game State module. If a locked block or the active piece exists at the current coordinate, it outputs the white to the screen, otherwise, it outputs black.
 
