@@ -33,6 +33,8 @@ Assignment of 3 bit ID's for tetriminos:
 3'b101: 'S'
 3'b110: 'Z'
 
+we took Left as btn_proc_press[3], right as btn_proc_press[2], rotate as btn_proc_press[1], drop as btn_proc_press[0],  
+
 Module 7: VGA Controller
 This module handles the display output. It runs continuously on the 25.175 MHz clock to maintain internal horizontal and vertical pixel counters, which are used to generate the necessary HSYNC and VSYNC signals for the monitor. It translates the current pixel counters into Tetris grid coordinates (row and column). It then reads the Playfield Memory and checks the active piece coordinates from the Game State module. If a locked block or the active piece exists at the current coordinate, it outputs the white to the screen, otherwise, it outputs black.
 
