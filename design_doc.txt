@@ -25,13 +25,13 @@ This module tracks the live geometry of the active falling piece (coordinates an
 we have taken a sub module under Module-6: shape_look_up_table
 This takes Active piece, Rotation state, Active X and Y as inputs and gives coordinates of all 4 minos in the given rotation state.
 Assignment of 3 bit ID's for tetriminos:
-3'b000: 'O'
-3'b001: 'I'
-3'b010: 'T'
-3'b011: 'L'
-3'b100: 'J'
-3'b101: 'S'
-3'b110: 'Z'
+3'b001: 'O'
+3'b010: 'I'
+3'b011: 'T'
+3'b100: 'L'
+3'b101: 'J'
+3'b110: 'S'
+3'b111: 'Z'
 
 we took Left as btn_proc_press[3], right as btn_proc_press[2], rotate as btn_proc_press[1], drop as btn_proc_press[0],  
 
