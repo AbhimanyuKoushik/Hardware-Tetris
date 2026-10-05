@@ -33,7 +33,7 @@ Assignment of 3 bit ID's for tetriminos:
 3'b110: 'S'
 3'b111: 'Z'
 
-we took Left as btn_proc_press[3], right as btn_proc_press[2], rotate as btn_proc_press[1], drop as btn_proc_press[0],  
+we took soft drop as btn_proc_press[4], Left as btn_proc_press[3], right as btn_proc_press[2], rotate as btn_proc_press[1], hard drop as btn_proc_press[0],  
 
 Module 7: VGA Controller
 This module handles the display output. It runs continuously on the 25.175 MHz clock to maintain internal horizontal and vertical pixel counters, which are used to generate the necessary HSYNC and VSYNC signals for the monitor. It translates the current pixel counters into Tetris grid coordinates (row and column). It then reads the Playfield Memory and checks the active piece coordinates from the Game State module. If a locked block or the active piece exists at the current coordinate, it outputs the white to the screen, otherwise, it outputs black.
@@ -50,9 +50,9 @@ Module 2:
 Inputs:
 rst (1 bit) - Synchronous Reset signal
 clk (1 bit)  - The 25.175Mhz master clock
-btn_press_raw (5 bits) - Raw button presses for left, right, drop, rotate, swap
+btn_press_raw (6 bits) - Raw button presses for soft drop, left, right, hard drop, rotate, swap
 Outputs:
-btn_press_proc (5 bits) - Processed button presses which sychronize with clock
+btn_press_proc (6 bits) - Processed button presses which sychronize with clock
 
 Module 3:
 Inputs:
@@ -90,7 +90,7 @@ Inputs:
 rst (1 bit) - Synchronous Reset signal
 clk (1 bit) - The 25.175Mhz master clock
 tick_60Hz (1 bit) - Sourced from Clock Generation Unit (triggers gravity fall)
-btn_press_proc (4 bits) - Sourced from Input Module (Left, Right, Rotate, Drop)
+btn_press_proc (5 bits) - Sourced from Input Module (soft drop, Left, Right, Rotate, hard Drop)
 active_piece (3 bits) - Sourced from Piece Buffer (determines collision boundaries/geometry)
 grid_state (200 bits) - Sourced from Playfield Memory (evaluates tentative moves against locked blocks)
 Outputs:
