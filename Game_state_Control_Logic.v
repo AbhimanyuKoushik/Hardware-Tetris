@@ -1,7 +1,7 @@
 module Game_state_Control_Logic(
     input              clk,
     input              rst,
-    input      [3:0]   btn_press_proc,
+    input      [4:0]   btn_press_proc,
     input              tick_60Hz,
     input      [2:0]   active_piece,
     input      [199:0] grid_state,
@@ -117,7 +117,12 @@ module Game_state_Control_Logic(
         end
         else case (state)
             MOVE: begin
-                if (btn_press_proc[3]) begin
+				     if (btn_press_proc[4]) begin
+                    active_Y <= final_drop_Y;
+                    cell_idx <= 2'd0;
+                    state    <= LOCK_DELAY;
+                end
+                else if (btn_press_proc[3]) begin
                     if (!collide_left) active_X <= tentative_X_left;
                 end
                 else if (btn_press_proc[2]) begin
@@ -167,7 +172,7 @@ module Game_state_Control_Logic(
                     active_Y         <= tentative_Y_SRS;
                     lock_delay_count <= 6'd0;
                 end
-                else if (btn_press_proc[0]) begin
+                else if (btn_press_proc[4]) begin
                     active_Y <= final_drop_Y;
                     cell_idx <= 2'd0;
                     state    <= LOCK;
