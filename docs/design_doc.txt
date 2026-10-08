@@ -117,3 +117,75 @@ vga_hsync (1 bit) - Horizontal sync pulse to the physical monitor / SDL window
 vga_vsync (1 bit) - Vertical sync pulse to the physical monitor / SDL window
 vga_out (1 bits) - The final data to the physical monitor / SDL window (1-bit for white and black)
 
+
+CODE DESCRIPTION:
+
+Module 6:
+1. Internal Inputs and Control Signals
+
+Apart from the main inputs and outputs of the module, several internal signals are used to control the game.
+
+State – stores the current state of the FSM and determines which operation the game should perform.
+Cell Index – selects one of the four cells of the active piece when the piece is being locked into the playfield.
+Tick Count – counts the 60 Hz clock ticks used to control the falling speed of the piece.
+Lock Delay Count – counts the time for which a piece remains on the ground before it is permanently locked.
+Fall Due – indicates when the next gravity movement should occur.
+Gravity Y – represents the position one cell below the current piece and is used for gravity collision checking.
+Tentative Left/Right Position – represents the possible position of the piece after moving one cell left or right.
+Tentative Rotation – represents the next rotation state of the piece.
+SRS Tentative X and Y – store the position obtained after applying the Super Rotation System during rotation.
+Final Drop Y – stores the lowest valid position reached during a hard drop.
+Write Address and Write Data – are used to write the locked piece cells into the playfield memory.
+
+The gravity and lock-delay timing are controlled using predefined tick counts.
+
+2. Shape Lookup Table
+
+The shape lookup table determines the coordinates of the four cells of the active Tetris piece.
+It takes active X, active Y, active piece ID, and rotation state as inputs. Based on these values, it provides the coordinates of all four cells of the piece.
+The lookup table contains the required arrangements for all seven Tetris pieces and their different rotation states. Therefore, whenever the position or rotation of a piece changes, the lookup table provides the corresponding coordinates of its four cells.
+
+3. Collision Checking
+
+Collision checking uses active X, active Y, active piece ID, and rotation state to determine the coordinates of the four cells using the lookup table.
+These coordinates are then checked against the playfield memory.
+The system checks whether any cell:
+  i. goes outside the playfield.
+  ii. overlaps with an already occupied cell.
+
+If either condition occurs, a collision is detected.
+This collision-checking logic is reused for movement, gravity, rotation, spawning, and hard-drop operations.
+
+4. Super Rotation System (SRS)
+
+The rotation logic follows the Super Rotation System (SRS) guidelines used in Tetris.
+
+When a piece is rotated, the system first considers the normal rotated position. If that position causes a collision, it tries the predefined SRS kick positions.
+Five possible kick positions are implemented. These allow the piece to adjust its position when rotation causes a collision with a side wall, floor, or other boundary of the playfield.
+Separate kick values are used for the I-piece and the other Tetris pieces, according to the SRS rules. Each possible position is checked for collision, and the first valid position is selected.
+
+5. FSM States
+
+The overall game operation is controlled using a finite-state machine with the following states:
+
+i. MOVE
+This is the normal gameplay state. The player can move the piece left or right, rotate it, or perform a hard drop. The piece also automatically moves downward according to the gravity timing.
+
+ii. LOCK_DELAY
+When the piece reaches the floor or another block, it enters the lock-delay state. A short delay is provided during which the player can still move or rotate the piece. A successful movement or rotation resets the lock-delay timer. If the timer expires, the piece is locked.
+
+iii. LOCK
+In this state, the four cells of the active piece are written into the playfield memory. After all four cells are written, the FSM moves to the spawn state.
+
+iv. SPAWN
+The next piece is placed at the default starting position with its initial rotation. The required counters are also reset, and a spawn pulse is generated.
+
+v. SPAWN_WAIT
+This is an intermediate state between spawning the piece and checking its starting position.
+
+vi. SPAWN_CHECK
+The newly spawned piece is checked for collision. If it overlaps with an occupied cell, the game enters the GAME_OVER state. Otherwise, it proceeds to the MOVE state.
+
+vii. GAME_OVER
+The game remains in this state once no valid position is available for spawning a new piece.
+
